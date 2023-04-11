@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotwire Turbo Stream Example</title>
+    <script
+      src="https://cdn.skypack.dev/pin/@hotwired/turbo@v7.3.0-44BiCcz1UaBhgMf1MCRj/mode=imports,min/optimized/@hotwired/turbo.js"
+      type="module"
+    ></script>
+  </head>
+  <body>
+    <h1>Current Time:</h1>
+    <div id="time-container">
+      <span id="current-time">N/A</span>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const source = new EventSource("/sse");
+        Turbo.session.connectStreamSource(source);
+      });
+
+      document.addEventListener("turbo:before-visit", (event) => {
+        console.log("Turbo is about to visit:", event.detail.url);
+      });
+
+      document.addEventListener("turbo:render", (event) => {
+        console.log("Turbo has rendered the page.");
+      });
+
+      document.addEventListener("turbo:load", (event) => {
+        console.log("Turbo page load completed.");
+      });
+
+      document.addEventListener("turbo:before-stream-render", (event) => {
+        console.log(
+          "Turbo is about to render a stream update:",
+          event.detail.newStream
+        );
+      });
+    </script>
+  </body>
+</html>
